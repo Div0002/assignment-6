@@ -27,7 +27,10 @@ do_configure () {
 }
 
 do_compile () {
-	oe_runmake
+    oe_runmake \
+        CC="${CC}" \
+        CFLAGS="${CFLAGS}" \
+        LDFLAGS="${LDFLAGS} -pthread -lrt"
 }
 
 do_install () {

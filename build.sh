@@ -2,6 +2,8 @@
 # Script to build image for qemu.
 # Author: Siddhant Jajoo.
 
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+
 git submodule init
 git submodule sync
 git submodule update
@@ -28,7 +30,7 @@ layer_info=$?
 
 if [ $layer_info -ne 0 ];then
 	echo "Adding meta-aesd layer"
-	bitbake-layers add-layer ../meta-aesd
+	bitbake-layers add-layer "${REPO_ROOT}/meta-aesd"
 else
 	echo "meta-aesd layer already exists"
 fi
