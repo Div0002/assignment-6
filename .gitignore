@@ -5,4 +5,7 @@ build/
 crosstool-ng
 aesd-build
 .vscode/
+build
+.vscode
+valgrind-out.txt
 test.sh.log
