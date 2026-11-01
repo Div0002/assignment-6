@@ -9,3 +9,7 @@ build
 .vscode
 valgrind-out.txt
 test.sh.log
+
+# Yocto Wrynose
+bitbake-builds/
+pyshtables.py
