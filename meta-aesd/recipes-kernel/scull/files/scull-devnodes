@@ -1,0 +1,59 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          scull-devnodes
+# Required-Start:    $local_fs
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Create SCULL character device nodes
+### END INIT INFO
+
+create_nodes()
+{
+    # Ensure SCULL is loaded. modprobe is harmless if already loaded.
+    modprobe scull || return 1
+
+    major=$(awk '$2 == "scull" { print $1; exit }' /proc/devices)
+
+    if [ -z "$major" ]; then
+        echo "ERROR: SCULL major number not found"
+        return 1
+    fi
+
+    # Default SCULL configuration: 12 devices, minors 0-11.
+    for spec in \
+        scull0:0 scull1:1 scull2:2 scull3:3 \
+        scullpipe0:4 scullpipe1:5 scullpipe2:6 scullpipe3:7 \
+        scullsingle:8 sculluid:9 scullwuid:10 scullpriv:11
+    do
+        name=${spec%%:*}
+        minor=${spec##*:}
+        node="/dev/$name"
+
+        rm -f "$node"
+        mknod "$node" c "$major" "$minor" || return 1
+        chmod 660 "$node"
+    done
+
+    ln -sf scull0 /dev/scull
+    ln -sf scullpipe0 /dev/scullpipe
+
+    echo "SCULL device nodes created (major=$major)"
+}
+
+case "$1" in
+    start)
+        create_nodes
+        ;;
+    stop)
+        ;;
+    restart)
+        create_nodes
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit $?

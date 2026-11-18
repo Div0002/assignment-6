@@ -10,7 +10,7 @@ PV = "1.0+git${SRCPV}"
 
 SRCREV = "edfb6ec7840c97c5ccd7ebd7b63723d6ab7d23f1"
 
-S = "${WORKDIR}/git/server"
+S = "${UNPACKDIR}/aesd-assignments-1.0+git/server"
 
 inherit update-rc.d
 
